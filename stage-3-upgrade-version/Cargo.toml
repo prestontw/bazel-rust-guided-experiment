@@ -1,0 +1,6 @@
+[workspace]
+
+members = [
+  "backend",
+  # deployments/best-ci-util-ever
+]
