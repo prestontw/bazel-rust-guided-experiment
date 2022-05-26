@@ -21,6 +21,10 @@ how we try to do this, and any errors we run into.
 ## TL;DR
 
 Start from https://github.com/bazelbuild/rules_rust/tree/main/examples/crate_universe/vendor_local_manifests.
+This project makes some arguably strange assumptions around vendoring locations
+(and which BUILD file is responsible for keeping them up to date).
+If you plan on having Rust in multiple directories, check out this repository.
+
 If you are migrating an existing project, make sure that
 your rust code is not at the root level of the repository.
 (This is more than likely since bazel seems to be nicely
@@ -37,6 +41,14 @@ people there to be very helpful! Thank you so much to them!
 ## Remaining tasks
 Documentation-wise, maybe giving feedback to rules_rust?
 rules rust repository link broken (https://bazelbuild.github.io/rules_rust/flatten.html#rust_register_toolchains)
+(done!)
+
+Naming is strange: crates_repository vs crate_repositories (though this seems consistent with scala rules naming?)
+-> points to documentation again
+
+Vendoring to top-level
+
+Example of vendoring with manifests in documentation
 
 Add comments to snippets in root example for rust rules.
 
