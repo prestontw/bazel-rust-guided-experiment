@@ -1,5 +1,5 @@
 {
-  "checksum": "aad0ccff5b5bd94923acb2942fa21884dd4cd6e6e06f54d5ac0d415b92ad6c98",
+  "checksum": "bb9299a4ed60781087486eebd16602fb17414418f6b5b1d66c8414eb84bd52b0",
   "crates": {
     "ansi_term 0.12.1": {
       "name": "ansi_term",
@@ -4887,6 +4887,7 @@
     "cfg(not(windows))": [
       "aarch64-apple-darwin",
       "aarch64-apple-ios",
+      "aarch64-apple-ios-sim",
       "aarch64-linux-android",
       "aarch64-unknown-linux-gnu",
       "arm-unknown-linux-gnueabi",
@@ -4917,6 +4918,7 @@
     "cfg(unix)": [
       "aarch64-apple-darwin",
       "aarch64-apple-ios",
+      "aarch64-apple-ios-sim",
       "aarch64-linux-android",
       "aarch64-unknown-linux-gnu",
       "arm-unknown-linux-gnueabi",
