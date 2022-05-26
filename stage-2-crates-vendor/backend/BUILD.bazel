@@ -1,12 +1,3 @@
-load("@rules_rust//crate_universe:defs.bzl", "crates_vendor")
-
-crates_vendor(
-    name = "crates_vendor",
-    manifests = ["//backend:Cargo.toml"],
-    vendor_path = "../vendor",
-    mode = "local",
-)
-
 load("@rules_rust//rust:defs.bzl", "rust_binary")
 load("//vendor:defs.bzl", "all_crate_deps")
 
