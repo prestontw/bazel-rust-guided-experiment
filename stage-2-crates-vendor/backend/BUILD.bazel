@@ -3,7 +3,7 @@ load("@rules_rust//crate_universe:defs.bzl", "crates_vendor")
 crates_vendor(
     name = "crates_vendor",
     manifests = ["//backend:Cargo.toml"],
-    vendor_path = "vendor",
+    vendor_path = "/Users/preston/git/bazel-rust-guided-experiment/stage-2-crates-vendor/vendor",
     mode = "local",
 )
 
