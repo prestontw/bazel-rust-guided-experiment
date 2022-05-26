@@ -1,5 +1,15 @@
+load("@rules_rust//crate_universe:defs.bzl", "crates_vendor")
+
+crates_vendor(
+    name = "crates_vendor",
+    manifests = [":Cargo.toml"],
+    vendor_path = "vendor",
+    mode = "local",
+)
+
 load("@rules_rust//rust:defs.bzl", "rust_binary")
 load("@crate_index//:defs.bzl", "all_crate_deps")
+# load("//vendor:defs.bzl", "all_crate_deps")
 
 rust_binary(
     name = "hello_world",
