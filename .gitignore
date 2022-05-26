@@ -1,1 +1,5 @@
-*/target
+**/target
+**/bazel-bin
+**/bazel-out
+**/bazel-stage-1-bazel-from-rules-rust-example
+**/bazel-testlogs
