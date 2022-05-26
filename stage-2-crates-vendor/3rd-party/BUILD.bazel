@@ -5,7 +5,7 @@ load("@rules_rust//crate_universe:defs.bzl", "crates_vendor")
 
 crates_vendor(
     name = "crates_vendor",
-    manifests = ["//:Cargo.toml"],
+    manifests = ["//backend:Cargo.toml"],
     mode = "local",
     vendor_path = "crates",
     tags = ["manual"],

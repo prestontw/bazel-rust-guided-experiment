@@ -1,5 +1,8 @@
+exports_files(["Cargo.toml"])
+
 load("@rules_rust//rust:defs.bzl", "rust_binary")
-load("//vendor:defs.bzl", "all_crate_deps")
+load("@crate_index//:defs.bzl", "aliases", "all_crate_deps")
+# load("//vendor:defs.bzl", "all_crate_deps")
 
 rust_binary(
     name = "hello_world",
