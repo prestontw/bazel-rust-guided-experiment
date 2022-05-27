@@ -1,3 +1,5 @@
-Followed from https://bazelbuild.github.io/rules_rust/.
+## Stage 2: Remixed
 
-Will this build?
+This goes through the same steps
+as the other Stage 2, but with fewer commits
+since we know what works!
