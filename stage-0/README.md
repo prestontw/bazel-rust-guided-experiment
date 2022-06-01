@@ -19,6 +19,11 @@ There are two things to note on this vendoring:
 This anticipates adding other vendored dependencies for our front-end code
 (and better supports bazel's structure later).
 
+With the above two notes, the command that we run is
+```sh
+cargo vendor --versioned-dirs 3rd-party/crates
+```
+
 > :facepalm: I actually messed both of these things up when I originally went through this.
 > This lead to larger diffs when using bazel since I had to change the vendoring strategy
 > (vendored directories)
