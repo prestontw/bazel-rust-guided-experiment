@@ -50,6 +50,7 @@ crates_vendor(
 load("@rules_rust//rust:defs.bzl", "rust_binary")
 # load("@crate_index//:defs.bzl", "all_crate_deps")
 load("//3rd-party/crates:defs.bzl", "all_crate_deps")
+# ...
 ```
 
 This leads to error messages saying that
@@ -63,9 +64,13 @@ and see if that solves it for us.
 
 > :eyes: `rules_rust` is now on version `0.5.0`
 > while the documentation mentions `0.2.0`.
-> Keeping documentation up to date with code is hard.
-> I don't feel like this is a complaint because I can go
-> and improve the situation through pull requests!
+> To further complicate things, while I was writing this example,
+> the most recent release was version `0.4.0`.
+>
+> Keeping documentation up to date with code is hard,
+> as evinced that this guide is immediately behind!
+> I don't feel like this is a complaint regarding `rust_rules`'s documentation
+> because I can go and improve the situation through pull requests!
 
 After updating our version (and syncing our lockfile),
 we see the same error.
