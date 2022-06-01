@@ -76,7 +76,6 @@ After updating our version (and syncing our lockfile),
 we see the same error.
 Maybe we can break the cycle by removing the code that relies
 on `//3rd-party/crates`.
-Let's also specify the specific `backend` manifest.
 Now our `backend` `BUILD` file looks like
 ```python
 load("@rules_rust//crate_universe:defs.bzl", "crates_vendor")
@@ -88,6 +87,8 @@ crates_vendor(
     mode = "local",
 )
 ```
+
+Note that we need to use `bazel run` instead of `bazel build`.
 
 This actually works after one small correction.
 There's an issue with some versions of `tokio` that leads
@@ -105,22 +106,16 @@ structure isn't condusive to that.
 > to you, imagine that this monorepo also has some microservices
 > in a `services` directory.
 
-Trying `/vendor` as the `vendor_path` gives me permissions issues,
+Trying `/3rd-party/crates` as the `vendor_path` gives me permissions issues,
 which makes me think that it's not actually true that
 > Absolute paths will be treated as relative to the workspace root
 
-Just as an experiment, let's try specifying the full path to `vendor`.
+Just as an experiment, let's try specifying the full path to `3rd-party/crates`.
 This "works" as in it's able to vendor the dependencies.
-This reveals that `bazel` vendors dependencies slightly
-differently than how we have been, and more in line with
-```
-cargo vendor --versioned-dirs
-```
-So, let's replace our unversioned directories with versioned directories
-before we continue on our merry way.
 
-The full path won't work in general, so let's try a relative path!
-Let's try `../vendor` and see if it works.
+The full path won't work in general as soon as we go to another machine,
+so let's try a relative path!
+Let's try `../3rd-party/crates` and see if it works.
 I think at this point,
 https://bazelbuild.github.io/rules_rust/crate_universe.html#crates_vendor
 is starting to make some more sense.
@@ -131,7 +126,7 @@ the general rust library target.
 
 Anyway, let's try loading from it. Our `BUILD` file now ends with
 ```python
-load("//vendor:defs.bzl", "all_crate_deps")
+load("//3rd-party/crates:defs.bzl", "all_crate_deps")
 
 rust_binary(
     name = "hello_world",
@@ -139,18 +134,10 @@ rust_binary(
     deps = all_crate_deps(normal = True,),
 )
 ```
-Now that we aren't using `crate_index`,
-let's remove it from our `WORKSPACE` file.
-It now ends with
-```python
-load("@rules_rust//crate_universe:crates_deps.bzl", "crate_repositories")
-
-crate_repositories()
-```
 Finally, let's build just to make sure that everything works.
 
 ```
-ERROR: /Users/preston/git/bazel-rust-guided-experiment/stage-2-crates-vendor/backend/BUILD.bazel:13:12: //backend:hello_world: invalid label '//backend/../vendor/axum-0.5.6:axum' in element 0 of attribute 'deps' in 'rust_binary' rule: invalid package name 'backend/../vendor/axum-0.5.6': package name component contains only '.' characters
+ERROR: /Users/preston/git/bazel-rust-guided-experiment/stage-2-crates-vendor/backend/BUILD.bazel:13:12: //backend:hello_world: invalid label '//backend/../3rd-party/crates/axum-0.5.6:axum' in element 0 of attribute 'deps' in 'rust_binary' rule: invalid package name 'backend/../3rd-party/crates/axum-0.5.6': package name component contains only '.' characters
 ```
 
 So it looks like relative paths didn't work.
@@ -168,11 +155,14 @@ ERROR: /Users/preston/git/bazel-rust-guided-experiment/stage-2-crates-vendor/3rd
 when running `bazel run //3rd-party:crates_vendor`.
 Following this suggestion works!
 
-> :eyes: Note that I skipped over undoing some earlier steps
-> to get this target to work.
-> I made this decision because it was a temporary measure to dig
-> ourselves out of a hole that we got into:
-> as soon as we were out, I removed it again.
+Now that we aren't using `crate_index`,
+let's remove it from our `WORKSPACE` file.
+It now ends with
+```python
+load("@rules_rust//crate_universe:crates_deps.bzl", "crate_repositories")
+
+crate_repositories()
+```
 
 The final version of our `backend/BUILD.bazel` and `3rd-party/BUILD.bazel` are:
 ```python
