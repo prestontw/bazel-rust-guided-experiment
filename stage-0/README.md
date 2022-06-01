@@ -13,11 +13,21 @@ This is copied from Axum's [`readme` example](https://github.com/tokio-rs/axum/t
 For actually vendoring the dependencies, this uses `cargo-vendor`:
 https://doc.rust-lang.org/cargo/commands/cargo-vendor.html.
 
-> 👀 If I could go back and do this, I would use the `--versioned-dirs` option
-> for fewer changes when vendoring with bazel...
-> I might also put it in a different directory...
->
-> Ooh, foreshadowing!
+There are two things to note on this vendoring:
+- we used versioned directories via the `--versioned-dirs` flag to `cargo vendor`, and
+- it's actually nested inside of our vendored directory, specifically for Rust.
+This anticipates adding other vendored dependencies for our front-end code
+(and better supports bazel's structure later).
+
+With the above two notes, the command that we run is
+```sh
+cargo vendor --versioned-dirs 3rd-party/crates
+```
+
+> :facepalm: I actually messed both of these things up when I originally went through this.
+> This lead to larger diffs when using bazel since I had to change the vendoring strategy
+> (vendored directories)
+> as well as the directory structure.
 
 We can verify this is successful with `cargo build --offline`.
 

@@ -1,8 +1,5 @@
 **/target
 **/bazel-bin
 **/bazel-out
-**/bazel-stage-1-bazel-from-rules-rust-example
-**/bazel-stage-2-crates-vendor
-**/bazel-stage-2-verify
-**/bazel-stage-3-upgrade-version
+**/bazel-stage-*
 **/bazel-testlogs
