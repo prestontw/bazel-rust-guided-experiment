@@ -203,10 +203,9 @@ with our vendored dependencies.
 https://github.com/prestontw/bazel-rust-guided-experiment/pull/2
 is all of the steps we did but condensed down to avoid
 the experimentation and flailing:
-- we picked going with the `3rd-party` approach from the beginning,
-- we updated out `.cargo/config.toml` file to point to the new directory,
-- we revendored with `cargo vendor --versioned-dirs` to the new location
-to mimimize noise of actually vendoring.
+- we picked going with the `3rd-party` `BUILD` file from the beginning,
+- we exposed `backend`'s `Cargo.toml`, and
+- we updated out `.cargo/config.toml` file to point to the new directory.
 
 ## What's next?
 
