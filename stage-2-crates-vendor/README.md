@@ -34,6 +34,7 @@ Does this supplant `Cargo.toml` information?
 
 This is too much. But, there are other worked examples!
 Let's try copying [an example](https://github.com/bazelbuild/rules_rust/blob/0265c293f195a59da45f83aafcfca78eaf43a4c5/examples/crate_universe/vendor_local_manifests/BUILD.bazel) from the `rules_rust` repo.
+This is for our `BUILD` file in our `backend` directory.
 We will tweak it slightly becase we want to reuse the vendored
 dependencies we set up in `cargo vendor`:
 ```python
@@ -42,19 +43,19 @@ load("@rules_rust//crate_universe:defs.bzl", "crates_vendor")
 crates_vendor(
     name = "crates_vendor",
     manifests = [":Cargo.toml"],
-    vendor_path = "vendor",
+    vendor_path = "3rd-party/crates",
     mode = "local",
 )
 
 load("@rules_rust//rust:defs.bzl", "rust_binary")
 # load("@crate_index//:defs.bzl", "all_crate_deps")
-load("//vendor:defs.bzl", "all_crate_deps")
+load("//3rd-party/crates:defs.bzl", "all_crate_deps")
 ```
 
 This leads to error messages saying that
-`vendor` is not a package. Hmm.
+`3rd-party/crates` is not a package. Hmm.
 Maybe it's due to a kind of cyclic issue?
-`crates_vendor` would create the `//vendor` package,
+`crates_vendor` would create the `//3rd-party/crates` package,
 but then we try to use that same package potentially
 before it's created since it's in the same file.
 That's weird. Let's try upgrading our version of `rules_rust`
@@ -69,11 +70,18 @@ and see if that solves it for us.
 After updating our version (and syncing our lockfile),
 we see the same error.
 Maybe we can break the cycle by removing the code that relies
-on `//vendor`.
+on `//3rd-party/crates`.
 Let's also specify the specific `backend` manifest.
 Now our `backend` `BUILD` file looks like
 ```python
+load("@rules_rust//crate_universe:defs.bzl", "crates_vendor")
 
+crates_vendor(
+    name = "crates_vendor",
+    manifests = [":Cargo.toml"],
+    vendor_path = "3rd-party/crates",
+    mode = "local",
+)
 ```
 
 This actually works after one small correction.
