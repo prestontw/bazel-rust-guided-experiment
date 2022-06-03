@@ -1,9 +1,5 @@
 ## Stage 2: Let's vendor our dependencies through bazel!
 
-If you want to follow along through a pull request,
-all of this work is availagble at
-https://github.com/prestontw/bazel-rust-guided-experiment/pull/1/.
-
 To recap, we can build our project through bazel! Whoopee!
 But it isn't making use of our vendored dependencies that we got
 through `cargo vendor`! Let's try to remedy this.
@@ -68,7 +64,7 @@ and see if that solves it for us.
 > the most recent release was version `0.4.0`.
 >
 > Keeping documentation up to date with code is hard,
-> as evinced that this guide is immediately behind!
+> as evinced by the fact that this guide is immediately behind!
 > I don't feel like this is a complaint regarding `rust_rules`'s documentation
 > because I can go and improve the situation through pull requests!
 
@@ -92,12 +88,15 @@ Note that we need to use `bazel run` instead of `bazel build`.
 
 This actually works after one small correction.
 There's an issue with some versions of `tokio` that leads
-to errors on uses with `bazel`.
+to errors on usage with `bazel`.
 The [`vendor_local_manifests` example](https://github.com/bazelbuild/rules_rust/blob/0265c293f195a59da45f83aafcfca78eaf43a4c5/examples/crate_universe/vendor_local_manifests/Cargo.toml#L8) has a fix---let's
 borrow other people's workarounds.
 
 There's a bigger philosophical issue here, though.
 This places the dependencies inside of `backend`.
+Whoops! We placed dependencies in the root level `3rd-party`
+to enable sharing between different rust projects,
+potentially outside of the `backend` directory.
 If we want some of our utilities to use the same
 version as we do in our backend, this nested directory
 structure isn't condusive to that.
@@ -124,7 +123,8 @@ and, for some reason,
 the example that we've been following combined that target with
 the general rust library target.
 
-Anyway, let's try loading from it. Our `BUILD` file now ends with
+Anyway, let's try loading from it. Filling back in code that we removed,
+our `BUILD` file now ends with
 ```python
 load("//3rd-party/crates:defs.bzl", "all_crate_deps")
 
@@ -143,7 +143,7 @@ ERROR: /Users/preston/git/bazel-rust-guided-experiment/stage-2-crates-vendor/bac
 So it looks like relative paths didn't work.
 
 > :eyes: So time for the file actually mentioned in the documentation, right?
-
+>
 > :facepalm: Yes. It still feels weird to me that the path
 > being relative to the workspace root didn't work, but oh well!
 
