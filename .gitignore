@@ -3,3 +3,4 @@
 **/bazel-out
 **/bazel-stage-*
 **/bazel-testlogs
+book
