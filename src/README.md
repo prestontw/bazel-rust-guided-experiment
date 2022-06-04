@@ -2,12 +2,18 @@
 A blog-post style collection of project states as we move from a vendored cargo project to bazel
 
 ## Motivation
-working on cargo chef
- -> really, this gives us one mega layer, we want finer caching; doesn't cache local deps
-Amos's blog on ideal CI setup
- -> looking into SCCache
-Reddit [comment](https://www.reddit.com/r/rust/comments/ua09tc/comment/i5w7n6g/?utm_source=share&utm_medium=web2x&context=3) on more dependable setup
-Looking at bazel at work
+- working on cargo chef
+  - really, this gives us one mega layer, we want finer caching; doesn't cache local deps
+- Amos's blog on ideal CI setup
+  - looking into SCCache
+- Reddit [comment](https://www.reddit.com/r/rust/comments/ua09tc/comment/i5w7n6g/?utm_source=share&utm_medium=web2x&context=3) on more dependable setup
+- Looking at bazel at work
+
+```rust
+{{ #include ./stage-0/backend/src/main.rs:2:10 }}
+```
+
+![The Rust Logo](../src/Screen%20Shot%202022-06-04%20at%2012.42.40%20AM.png)
 
 ## Structure of this repo
 
