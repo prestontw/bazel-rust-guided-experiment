@@ -1,4 +1,6 @@
 # Summary
 
-- [Chapter 1](./chapter_1.md)
-- [Stage 2: vendoring dependencies with Bazel](../stage-2-crates-vendor/README.md)
+- [Introduction](./README.md)
+- [The initial Rust project](./stage-0/README.md)
+- [Building with Bazel](./stage-1-bazel-from-rules-rust-example/README.md)
+- [Vendoring dependencies with Bazel](stage-2-crates-vendor/README.md)
