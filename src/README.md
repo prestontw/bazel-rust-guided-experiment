@@ -106,34 +106,75 @@ since I enjoy using cargo locally.
 
 ## Structure of this repo
 
-Each child directory is the entire state of the project.
-Hopefully, following along from one folder's readme
-will lead to the next sequential folder.
-
-The readme will go into detail on what we want to accomplish,
+Each child directory is the entire state of the project for that particular goal.
+The readme for each child
+will go into detail on what we want to accomplish,
 how we try to do this, and any errors we run into.
+The general flow is
+
+1. The initial rust project,
+1. Building with bazel,
+1. Vendoring with bazel, and finally
+1. Using local dependencies with bazel and wrapping up.
 
 ## TL;DR
 
-Start from https://github.com/bazelbuild/rules_rust/tree/main/examples/crate_universe/vendor_local_manifests.
-This project makes some arguably strange assumptions around vendoring locations
-(and which BUILD file is responsible for keeping them up to date).
-If you plan on having Rust in multiple directories, check out this repository.
+If you want to vendor your dependencies locally,
+start from the [vendor local manifests (Cargo.toml files) example](https://github.com/bazelbuild/rules_rust/tree/main/examples/crate_universe/vendor_local_manifests).
 
 If you are migrating an existing project, make sure that
-your rust code is not at the root level of the repository.
-(This is more than likely since bazel seems to be nicely
-used in multi-lingual repos, in which case odds are rust source
-directories are not at the root level.)
-
-In comparison to the example directory,
-This repo has some nice benefits like covering tests too,
-but the rules_rust repo will stay in-sync with the actual bazel rules.
+your Rust code is not at the root level of the repository.
+(This is more than likely if you are in a multi-lingual project
+where using bazel would lead to cross-language builds,
+and potentially less likely if you are working in a Rust-only project.)
 
 The bazel slack rust channel seems to be active and I found
 people there to be very helpful! Thank you so much to them!
 
+### Is it worth the complexity?
+
+If you're working just in one language, I don't know.
+If you spend a lot of time building, maybe!
+If your project is kind of small and build times are't significant,
+maybe stick with language tooling until that becomes painful.
+
+> :shrug: But I've also heard the advice that you should switch to bazel before this point.
+
+If you work in a project that has different languages all working together,
+bazel is a nice unified build tool that tries (depending on support level)
+to work for all of them.
+In this case, I think the smart builds and caching is worth the extra work.
+
+For using bazel with Rust specifically,
+there is added complexity in maintaining these build files,
+but this particular bazel setup seems to avoid some of the issues that bazel runs into:
+
+- it still cooperates with native rust tooling and IDE integration, and
+- transitive dependencies are handled nicely.
+
+Both of these are problems that people have with bazel
+(watch some Bazel talks on Youtube and see how many of them talk about
+getting bazel to work with IntelliJ).
+
+But there is something to keep in mind:
+we have had to add these build files ourselves to get this level of caching.
+We are taking on a maintenance cost.
+Bazel is also not completely stable---it is under active development.
+Some of their plans (besides general improvements) include
+getting rid of WORKSPACE files
+and replacing them with mod files or something
+(see https://bazel.build/docs/bzlmod),
+so there might be some pretty signficant organizational changes.
+That being said, this is a nice tool for coordinating with other languages
+and there's a certain sense of coordination between companies too.
+Having a bunch of companies use this tool means that everyone can benefit
+(but that could also mean that there are a lot of changes to keep up with).
+
+Separately, bazel can also be used to [minimise the number of potential dependencies](https://youtu.be/5OjqD-ow8GE?t=2089),
+providing a road bump from your code base from turning into a ball of mud.
+
 ## Remaining tasks
+
 Documentation-wise, maybe giving feedback to rules_rust?
 rules rust repository link broken (https://bazelbuild.github.io/rules_rust/flatten.html#rust_register_toolchains)
 (done!)
@@ -141,21 +182,28 @@ rules rust repository link broken (https://bazelbuild.github.io/rules_rust/flatt
 Naming is strange: crates_repository vs crate_repositories (though this seems consistent with scala rules naming?)
 -> points to documentation again
 
-Vendoring to top-level
+have local dependency!
 
 Example of vendoring with manifests in documentation
 
 Add comments to snippets in root example for rust rules.
 
 For this project:
+
 - Incorporating with CI
-- Using a workspace root-level cargo.toml
 - Building with Docker
 
 Document links:
+
 - https://bazelbuild.github.io/rules_rust/
 - https://bazelbuild.github.io/rules_rust/defs.html
 - https://bazelbuild.github.io/rules_rust/crate_universe.html
 - https://github.com/bazelbuild/rules_rust/tree/main/examples/crate_universe
 - https://bazelbuild.slack.com/archives/CSV56UT0F
 - https://github.com/tokio-rs/axum/tree/19fe93262fc14862f828b1db8b434fd8608a2a87/examples/readme
+
+```rust
+{{ #include ./stage-0/backend/src/main.rs:2:10 }}
+```
+
+![The Rust Logo](../src/Screen%20Shot%202022-06-04%20at%2012.42.40%20AM.png)
