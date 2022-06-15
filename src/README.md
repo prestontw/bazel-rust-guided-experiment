@@ -2,17 +2,17 @@
 
 This article is about incorporating the [Bazel build tool](bazel.build) into a
 Rust project so that both `cargo` and `bazel`-based builds, tests, and vendoring
-still work. Specifically, this is a Rust project that makes use of vendored
+work. Specifically, this is a Rust project that makes use of vendored
 dependencies. This integration works out really nicely, but there were some
 painful details that I ran into. I'm writing this article to
 
 1. Highlight those pain points and what I should have done instead,
-1. Show how `cargo` and `bazel` work together to vendor dependencies, and
+1. Give a quick demo on using `bazel` and how `cargo` and `bazel` work together to vendor dependencies, and
 1. Point out opportunities to improve the `rules_rust` documentation.
 
 I'm trying to keep this article focused on relevant issues that might come up
 with integrating `bazel`. There were separate issues that came up due to
-"incorrect" directory structure, using the wrong `bazel` rule, etc. Where I
+"incorrect" directory structure, using the wrong `bazel` rules, etc. Where I
 tried something that didn't work, I will point it out as a kind of warning sign.
 
 > :eyes: And I will point out places that might be problems in the future, or,
@@ -38,16 +38,18 @@ blogs, and comments that got me here:
 1. [cargo-chef](https://github.com/LukeMathWalker/cargo-chef) is a tool to
    improve caching between Docker builds for Rust projects. This formalizes a
    process of turning a Rust project into a hollow skeleton just including its
-   dependencies with the observation that the dependencies don't change
-   frequently, so could be a good source of caching.
+   remote dependencies. This stems from the observation that the remote dependencies don't change
+   frequently, so compiling them once as a Docker layer could be a good source of caching.
+
    [cargo-chef](https://github.com/LukeMathWalker/cargo-chef#limitations-and-caveats)
    lists some limitations, but they all really boil down to a simple caching
    strategy of one mega cache that only includes external dependencies. Local
-   dependencies inside of the project are rebuilt from scratch each time, too,
+   dependencies inside of the project are rebuilt from scratch each time,
    which is a major pain point when they dominate compilation times. This is
-   something that I ran into at my previous strategy: there were some other
+   something that I ran into at my previous company: there were some other
    issues that using `cargo-chef` presented (mostly around patched dependencies)
    but the main one was that we really wanted to cache local dependencies.
+
 1. [fasterthanlime's blog on his ideal Rust setup](https://fasterthanli.me/articles/my-ideal-rust-workflow).
    I really enjoy Amos's articles. I really enjoy the depth, the narrative, the
    content, and the characters...
@@ -62,7 +64,7 @@ blogs, and comments that got me here:
    ~~steal~~ look into for my own Rust development. He has a specific section on
    [CI](https://fasterthanli.me/articles/my-ideal-rust-workflow#circleci) which includes:
 
-   > Because, as I mentioned before, I want different compile flags in CI... but
+   > ... but
    > I also want sccache, which is a much better solution than any built-in CI
    > caching.
    >
@@ -79,7 +81,7 @@ blogs, and comments that got me here:
 1. I saw a comment on Reddit [for an alternative to `sccache`](https://www.reddit.com/r/rust/comments/ua09tc/comment/i5w7n6g/?utm_source=share&utm_medium=web2x&context=3).
    The parent post was about a Rust build tool, Fleet, that claims to lead to 5x faster build times.
    `bitemyapp` comments on various ways the tool achieves its speedups
-   and offer some of their own thoughts and advice on optimizing Rust build times.
+   and offers some of their own thoughts and advice on optimizing Rust build times.
    I've copied what they say regarding `sccache`:
 
    > `sccache` with on-disk caching: `sccache` is really flaky and poorly maintained. I was only able to get the S3 backend to work by using a fork of `sccache` and even then it breaks all the time for mysterious reasons. Using the on-disk configuration is confusing to me, you can get the same benefit by just setting a shared Cargo target directory. I set `CARGO_TARGET_DIR` in my `.zshrc` to `$HOME/.cargo/cache` and that gets shared across all projects. My guess is [Fleet's authors] saw a benefit from using `sccache` because they hadn't tried that and were benefiting from the cross-project sharing.
@@ -98,7 +100,7 @@ blogs, and comments that got me here:
 
 All of this nudged me to checking out bazel for my own learning.
 My default Rust project template uses vendored dependencies,
-and bazel can sometimes struggle with dependencies in general,
+and bazel has a reputation of struggling with remote dependencies,
 so I wanted to see how easy it was to get bazel working in that type of project setup.
 
 I also wanted to see how bazel and cargo can work together,
@@ -124,7 +126,7 @@ start from the [vendor local manifests (Cargo.toml files) example](https://githu
 
 If you are migrating an existing project, make sure that
 your Rust code is not at the root level of the repository.
-(This is more than likely if you are in a multi-lingual project
+(This is likely if you are in a multi-lingual project
 where using bazel would lead to cross-language builds,
 and potentially less likely if you are working in a Rust-only project.)
 
@@ -145,13 +147,11 @@ bazel is a nice unified build tool that tries (depending on support level)
 to work for all of them.
 In this case, I think the smart builds and caching is worth the extra work.
 
-For using bazel with Rust specifically,
-there is added complexity in maintaining these build files,
-but this particular bazel setup seems to avoid some of the issues that bazel runs into:
-
-- it still cooperates with native rust tooling and IDE integration, and
-- transitive dependencies are handled nicely.
-
+There is added complexity in maintaining bazel build files,
+but for using bazel with Rust specifically,
+the rules and targets seem to
+still cooperate with native rust tooling and IDE integration, and
+to handle transitive dependencies nicely.
 Both of these are problems that people have with bazel
 (watch some Bazel talks on Youtube and see how many of them talk about
 getting bazel to work with IntelliJ).
@@ -165,7 +165,7 @@ getting rid of WORKSPACE files
 and replacing them with mod files or something
 (see https://bazel.build/docs/bzlmod),
 so there might be some pretty signficant organizational changes.
-That being said, this is a nice tool for coordinating with other languages
+That being said, this is a nice tool for coordinating with other languages,
 and there's a certain sense of coordination between companies too.
 Having a bunch of companies use this tool means that everyone can benefit
 (but that could also mean that there are a lot of changes to keep up with).
