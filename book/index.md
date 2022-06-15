@@ -145,7 +145,8 @@ maybe stick with language tooling until that becomes painful.
 If you work in a project that has different languages all working together,
 bazel is a nice unified build tool that tries (depending on support level)
 to work for all of them.
-In this case, I think the smart builds and caching is worth the extra work.
+In this case, I think the smart builds and caching is worth the extra work
+for large enough projects.
 
 There is added complexity in maintaining bazel build files,
 but for using bazel with Rust specifically,
