@@ -193,6 +193,10 @@ For this project:
 - Incorporating with CI
 - Building with Docker
 
+go through Todo's:
+
+- add links to project structure
+
 Document links:
 
 - https://bazelbuild.github.io/rules_rust/
