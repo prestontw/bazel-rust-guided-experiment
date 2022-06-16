@@ -108,16 +108,17 @@ since I enjoy using cargo locally.
 
 ## Structure of this repo
 
-Each child directory is the entire state of the project for that particular goal.
+Each child directory is the entire completed state of the project for that particular goal.
 The readme for each child
 will go into detail on what we want to accomplish,
-how we try to do this, and any errors we run into.
+the steps from the previous completed goal to the current target goal,
+and any errors we encounter along the way.
 The general flow is
 
-1. The initial rust project,
+0. The initial rust project,
 1. Building with bazel,
 1. Vendoring with bazel, and finally
-1. Using local dependencies with bazel and wrapping up.
+1. Wrapping up.
 
 ## TL;DR
 
