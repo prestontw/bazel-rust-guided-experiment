@@ -78,7 +78,7 @@ blogs, and comments that got me here:
    despite rumors of it being somewhat unreliable and unmaintained.
    And then...
 
-1. I saw a comment on Reddit [for an alternative to `sccache`](https://www.reddit.com/r/rust/comments/ua09tc/comment/i5w7n6g/?utm_source=share&utm_medium=web2x&context=3).
+1. I saw a [comment on Reddit](https://www.reddit.com/r/rust/comments/ua09tc/comment/i5w7n6g/?utm_source=share&utm_medium=web2x&context=3) for an alternative to `sccache`.
    The parent post was about a Rust build tool, Fleet, that claims to lead to 5x faster build times.
    `bitemyapp` comments on various ways the tool achieves its speedups
    and offers some of their own thoughts and advice on optimizing Rust build times.
