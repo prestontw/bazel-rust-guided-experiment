@@ -26,7 +26,7 @@ tried something that didn't work, I will point it out as a kind of warning sign.
 
 Rust compilation times are a common complaint. There have been significant
 improvements here in raw Rust compiler performance,
-but we can even bigger
+but we can achieve even bigger
 savings by caching intermediate results between compilation runs. We can see the
 value of this strategy in the push for turning on incremental mode for the Rust
 compiler. Unfortunately, this isn't available everywhere that we might want to
