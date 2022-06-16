@@ -1,6 +1,6 @@
 # bazel-rust-guided-experiment
 
-This article is about incorporating the [Bazel build tool](bazel.build) into a
+This article is about incorporating the [Bazel build tool](https://bazel.build) into a
 Rust project so that both `cargo` and `bazel`-based builds, tests, and vendoring
 work. Specifically, this is a Rust project that makes use of vendored
 dependencies. This integration works out really nicely, but there were some
@@ -26,7 +26,7 @@ tried something that didn't work, I will point it out as a kind of warning sign.
 
 Rust compilation times are a common complaint. There have been significant
 improvements here in raw Rust compiler performance,
-but we can even bigger
+but we can achieve even bigger
 savings by caching intermediate results between compilation runs. We can see the
 value of this strategy in the push for turning on incremental mode for the Rust
 compiler. Unfortunately, this isn't available everywhere that we might want to
@@ -108,16 +108,17 @@ since I enjoy using cargo locally.
 
 ## Structure of this repo
 
-Each child directory is the entire state of the project for that particular goal.
+Each child directory is the entire completed state of the project for that particular goal.
 The readme for each child
 will go into detail on what we want to accomplish,
-how we try to do this, and any errors we run into.
+the steps from the previous completed goal to the current target goal,
+and any errors we encounter along the way.
 The general flow is
 
-1. The initial rust project,
+0. The initial rust project,
 1. Building with bazel,
 1. Vendoring with bazel, and finally
-1. Using local dependencies with bazel and wrapping up.
+1. Wrapping up.
 
 ## TL;DR
 
@@ -150,12 +151,15 @@ for large enough projects.
 
 There is added complexity in maintaining bazel build files,
 but for using bazel with Rust specifically,
-the rules and targets seem to
-still cooperate with native rust tooling and IDE integration, and
+the rules and targets seem both to
+still cooperate with native rust tooling and IDE integration and
 to handle transitive dependencies nicely.
 Both of these are problems that people have with bazel
 (watch some Bazel talks on Youtube and see how many of them talk about
 getting bazel to work with IntelliJ).
+This guide is really only possible because we are standing on the shoulders of giants---`rules_rust`
+developers really put in a lot of work to make these
+typically painful issues into non-issues.
 
 But there is something to keep in mind:
 we have had to add these build files ourselves to get this level of caching.

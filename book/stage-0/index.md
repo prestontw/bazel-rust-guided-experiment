@@ -31,7 +31,7 @@ cargo vendor --versioned-dirs 3rd-party/crates
 > (since it uses versions in its directory names)
 > and lots of floundering when trying to get bazel
 > to vendor dependencies to an appropriate location.
-> This is an example of something that isn't super pertinent to the integration, I think.
+> This is an example of something that I can smooth over in this blog.
 > I can make this mistake in my original process,
 > then time travel as if I did it correctly originally in this post!
 > Note that this is a pain point, though.
