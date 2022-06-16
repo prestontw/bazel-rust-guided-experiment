@@ -1,6 +1,6 @@
 # bazel-rust-guided-experiment
 
-This article is about incorporating the [Bazel build tool](bazel.build) into a
+This article is about incorporating the [Bazel build tool](https://bazel.build) into a
 Rust project so that both `cargo` and `bazel`-based builds, tests, and vendoring
 work. Specifically, this is a Rust project that makes use of vendored
 dependencies. This integration works out really nicely, but there were some
