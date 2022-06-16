@@ -151,12 +151,15 @@ for large enough projects.
 
 There is added complexity in maintaining bazel build files,
 but for using bazel with Rust specifically,
-the rules and targets seem to
-still cooperate with native rust tooling and IDE integration, and
+the rules and targets seem both to
+still cooperate with native rust tooling and IDE integration and
 to handle transitive dependencies nicely.
 Both of these are problems that people have with bazel
 (watch some Bazel talks on Youtube and see how many of them talk about
 getting bazel to work with IntelliJ).
+This guide is really only possible because we are standing on the shoulders of giants---`rules_rust`
+developers really put in a lot of work to make these
+typically painful issues into non-issues.
 
 But there is something to keep in mind:
 we have had to add these build files ourselves to get this level of caching.
