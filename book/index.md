@@ -184,12 +184,21 @@ Documentation-wise, maybe giving feedback to rules_rust?
 rules rust repository link broken (https://bazelbuild.github.io/rules_rust/flatten.html#rust_register_toolchains)
 (done!)
 
+how much we can borrow from existing rust infra: rust toolchain files,
+cargo.toml's for automatic bin, library macros
+-> it would be great if we could copy
+`cargo run --bin <x>` to
+`bazel run //<x>` or
+`cargo test --test <x>` to
+`bazel test //<x>` automatically.
+like in https://bazelbuild.github.io/rules_nodejs/repositories.html#generated-macros-for-npm-packages-with-bin-entries
+
 Naming is strange: crates_repository vs crate_repositories (though this seems consistent with scala rules naming?)
 -> points to documentation again
 
 have local dependency!
 
-Example of vendoring with manifests in documentation
+Request or add example of vendoring with manifests in rules_rust documentation
 
 Add comments to snippets in root example for rust rules.
 
@@ -201,6 +210,8 @@ For this project:
 go through Todo's:
 
 - add links to project structure
+- comment on cargo raze going through bazel, rules rust might do that or some analog for us automatically
+  -> but, this means that we don't really care about how dependencies are managed!
 
 Document links:
 
