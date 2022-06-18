@@ -1,0 +1,16 @@
+load("@rules_rust//crate_universe:defs.bzl", "crates_vendor")
+
+crates_vendor(
+    name = "crates_vendor",
+    manifests = [":Cargo.toml"],
+    vendor_path = "3rd-party/crates",
+    mode = "local",
+)
+
+load("//3rd-party/crates:defs.bzl", "all_crate_deps")
+
+rust_binary(
+    name = "hello_world",
+    srcs = ["src/main.rs"],
+    deps = all_crate_deps(normal = True,),
+)

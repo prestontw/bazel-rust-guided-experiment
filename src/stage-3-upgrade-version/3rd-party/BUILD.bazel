@@ -1,0 +1,12 @@
+# Depending on having multiple binaries and making sure
+# that all of them share the same depencies, this might be better
+
+load("@rules_rust//crate_universe:defs.bzl", "crates_vendor")
+
+crates_vendor(
+    name = "crates_vendor",
+    manifests = ["//backend/server:Cargo.toml"],
+    mode = "local",
+    vendor_path = "crates",
+    tags = ["manual"],
+)

@@ -1,0 +1,8 @@
+[book]
+authors = ["Preston TW"]
+language = "en"
+multilingual = false
+src = "src"
+title = "Incorporating Bazel with Rust"
+
+[output.markdown]

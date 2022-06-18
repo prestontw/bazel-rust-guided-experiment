@@ -1,0 +1,9 @@
+package(default_visibility = ["//visibility:public"])
+exports_files(["Cargo.toml"])
+
+load("@rules_rust//rust:defs.bzl", "rust_library")
+
+rust_library(
+    name = "math",
+    srcs = ["src/lib.rs"],
+)
