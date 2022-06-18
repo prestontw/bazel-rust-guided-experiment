@@ -207,6 +207,15 @@ crates_vendor(
 Building our backend target again works!
 And uses our vendored dependencies.
 
+### Cleaning up previous steps
+
+> :eyes: Hmm, look at that, we don't need some of these files anymore!
+
+> :facepalm: Yes, this actually took me reaching out on slack to realize.
+> Because we aren't using `crate_index` anymore,
+> we can also remove our old `BUILD.bazel` at the root level
+> and the `Cargo.Bazel.lock`.
+
 ## What did we do?
 
 After a little bit of struggling with mixed `BUILD` files,
