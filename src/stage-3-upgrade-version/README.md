@@ -82,7 +82,7 @@ we could specify visibility other than `public`,
 but let's do that now for the sake of getting up and running quickly.
 
 ```python
-{{ #include ./backend/math/BUILD.bazel }}
+{{ #include ./backend/math/.build1.bazel }}
 ```
 
 Before we update our `backend/server/BUILD.bazel`
@@ -182,16 +182,64 @@ Let's try from this point and see if we run into the same errors.
 > This includes incorporating our dependency on `math` in our `BUILD.bazel`:
 >
 > ```
-> {{ #include ./backend/BUILD.bazel:9}}
+> {{ #include ./backend/.build1.bazel:9}}
 > ```
+
+Unexpectedly, this doesn't work:
+
+```
+ERROR: /Users/preston/git/bazel-rust-guided-experiment/src/stage-3-upgrade-version/backend/BUILD.bazel:6:12: Compiling Rust bin hello_world (1 files) failed: (Exit 1): process_wrapper failed: error executing command bazel-out/darwin_arm64-opt-exec-2B5CBBC6/bin/external/rules_rust/util/process_wrapper/process_wrapper --arg-file ... (remaining 130 arguments skipped)
+
+Use --sandbox_debug to see verbose messages from the sandbox
+error[E0433]: failed to resolve: use of undeclared crate or module `math`
+  --> backend/src/main.rs:44:13
+   |
+44 |         id: math::double(1337),
+   |             ^^^^ use of undeclared crate or module `math`
+
+error: aborting due to previous error
+```
+
+This works with `cargo`, let's play around with our `bazel` rules a little.
+Looking at [an example](https://github.com/bazelbuild/rules_rust/blob/59fab4e79f62bfa13551ac851a40696c24c0c3a4/examples/crate_universe/cargo_workspace/num_printer/BUILD.bazel#L11),
+they specify the local dependency without the `:<name>` format.
+Let's make the necessary changes to our `math` library
+and reference it as such:
+
+```python
+{{ #include ./backend/math/BUILD.bazel:7 }}
+```
+
+```python
+{{ #include ./backend/BUILD.bazel:9 }}
+```
+
+Running `bazel build //...`
+
+```
+INFO: Analyzed 3 targets (2 packages loaded, 4 targets configured).
+INFO: Found 3 targets...
+INFO: Elapsed time: 0.898s, Critical Path: 0.78s
+INFO: 2 processes: 1 internal, 1 darwin-sandbox.
+INFO: Build completed successfully, 2 total actions
+```
+
+> :facepalm: I can't belive that works!
 
 > :eyes: _Most_ of the pain points we've run into
 > seem to be assumptions around directory structure that aren't immediately clear.
 > We faced this for dependencies, original repo layout,
 > and now for integrating local dependencies.
-> Part of this might be natural ("Oh yeah, why didn't you add a subdirectory for the local dependency?"),
+> But there seems to be some kind of weird coupling between local dependency crate names
+> and how we label them as `rust_library`'s!?
+>
+> A lot of the directory issues made a lot of sense
+> and would probably be how a more robust, more mature
+> codebase would be structured,
 > but all of those project structures worked fine just with Cargo.
 > Bazel is more opinionated in its folder structure.
+> One of the reasons why I'm writing this is to show
+> a directory structure that works.
 
 ## What did we do?
 

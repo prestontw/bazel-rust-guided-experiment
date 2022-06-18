@@ -4,6 +4,6 @@ exports_files(["Cargo.toml"])
 load("@rules_rust//rust:defs.bzl", "rust_library")
 
 rust_library(
-    name = "math",
+    name = "math_lib",
     srcs = ["src/lib.rs"],
 )
