@@ -20,7 +20,14 @@ https://github.com/bazelbuild/rules_rust/releases.
 Let's update it:
 
 ```python
-{{ #include ./WORKSPACE.bazel:5:12 }}
+http_archive(
+    name = "rules_rust",
+    sha256 = "73580f341f251f2fc633b73cdf74910f4da64d06a44c063cbf5c01b1de753ec1",
+    urls = [
+        "https://mirror.bazel.build/github.com/bazelbuild/rules_rust/releases/download/0.5.0/rules_rust-v0.5.0.tar.gz",
+        "https://github.com/bazelbuild/rules_rust/releases/download/0.5.0/rules_rust-v0.5.0.tar.gz",
+    ],
+)
 ```
 
 > :eyes: Boom, done, next!
@@ -40,13 +47,20 @@ then make the necessary changes on the bazel side.
 First, let's update our workspace `Cargo.toml` file:
 
 ```toml
-{{ #include ./Cargo.toml }}
+[workspace]
+
+members = [
+  "backend/server",
+  "backend/math",
+  # deployments/best-ci-util-ever
+]
 ```
 
 And let's include a dependency on `math` and use the `double` function in `server`.
 
 ```toml
-{{ #include ./backend/server/Cargo.toml:7:8}}
+[dependencies]
+math = { path = "../math" }
 ```
 
 Running
@@ -82,7 +96,15 @@ we could specify visibility other than `public`,
 but let's do that now for the sake of getting up and running quickly.
 
 ```python
-{{ #include ./backend/math/BUILD.bazel }}
+package(default_visibility = ["//visibility:public"])
+exports_files(["Cargo.toml"])
+
+load("@rules_rust//rust:defs.bzl", "rust_library")
+
+rust_library(
+    name = "math_lib",
+    srcs = ["src/lib.rs"],
+)
 ```
 
 Before we update our `backend/server/BUILD.bazel`

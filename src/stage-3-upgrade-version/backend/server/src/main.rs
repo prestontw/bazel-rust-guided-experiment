@@ -41,7 +41,7 @@ async fn create_user(
 ) -> impl IntoResponse {
     // insert your application logic here
     let user = User {
-        id: 1337,
+        id: math::double(1337),
         username: payload.username,
     };
 
