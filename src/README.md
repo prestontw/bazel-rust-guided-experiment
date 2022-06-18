@@ -58,7 +58,7 @@ blogs, and comments that got me here:
 
    > :facepalm: You don't... see it?
 
-   > :eyes: Haha... No.
+   > :eyes: Ha ha... No.
 
    I really enjoyed that article in particular because it had a lot of stuff I could
    ~~steal~~ look into for my own Rust development. He has a specific section on
