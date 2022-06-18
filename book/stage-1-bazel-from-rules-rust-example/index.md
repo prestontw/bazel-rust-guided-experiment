@@ -3,7 +3,7 @@
 Alright, we have a Rust project that somewhat represents a case
 that you might want to bazel-ify: we have a bunch of different languages
 all living in the same repository, and we are interested in caching
-our Rust build steps. Let's go through incorporating bazel into this project.
+our build steps. Let's go through incorporating bazel into the Rust parts of this project.
 Our goal for this stage will just be to get the project building with bazel---let's hold
 off on vendoring with bazel for a little later.
 We are all about those quick iteration times and getting feedback!
@@ -13,17 +13,19 @@ We are all about those quick iteration times and getting feedback!
 Well, we have a project that currently builds with cargo.
 We have four main pieces of documentation for Rust-specific bazel rules
 that will be helpful:
+
 - https://bazelbuild.github.io/rules_rust/,
 - https://bazelbuild.github.io/rules_rust/defs.html,
 - https://bazelbuild.github.io/rules_rust/crate_universe.html, and
 - https://bazelbuild.github.io/rules_rust/flatten.html, which is all of the documentation
-in one flattened location.
+  in one flattened location.
 
 Let's get started! First, we will setup our project.
 The root-level documentation helpfully has such a subsection:
 https://bazelbuild.github.io/rules_rust/#setup.
 Let's copy those contents to a `WORKSPACE.bazel` file
 we put at the root level of our project:
+
 ```python
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
@@ -47,6 +49,7 @@ rust_register_toolchains()
 
 [Later in that page](https://bazelbuild.github.io/rules_rust/#specifying-rust-version)
 they mention how we can specify the Rust version we want to use:
+
 ```python
 rust_register_toolchains(version = "1.59.0", edition="2018")
 ```
@@ -74,6 +77,7 @@ let's see if it's a good starting point for our first `BUILD` file!
 
 Slow down, eager beaver! Looking at the setup (https://bazelbuild.github.io/rules_rust/crate_universe.html#setup),
 there are actually some changes that we need to make to our `WORKSPACE` file:
+
 ```python
 load("@rules_rust//crate_universe:repositories.bzl", "crate_universe_dependencies")
 
@@ -84,13 +88,16 @@ One of the ways that we can handle our dependencies is through a cargo workspace
 https://bazelbuild.github.io/rules_rust/crate_universe.html#cargo-workspaces.
 This matches our project structure already, yay!
 Let's copy that code:
+
 ```python
 load("@rules_rust//crate_universe:defs.bzl", "crates_repository")
 
 crates_repository(
     name = "crate_index",
     lockfile = "//:Cargo.Bazel.lock",
-    manifests = ["//:Cargo.toml"],
+    manifests = [
+      "//:Cargo.toml",
+    ],
 )
 
 load("@crate_index//:defs.bzl", "crate_repositories")
@@ -102,6 +109,7 @@ There's another code example for a `BUILD` file for a library,
 but we are building a binary.
 Let's copy a barebones version of the [`rust_binary`](https://bazelbuild.github.io/rules_rust/defs.html#rust_binary)
 example to build our backend service:
+
 ```python
 load("@rules_rust//rust:defs.bzl", "rust_binary")
 load("@crate_index//:defs.bzl", "all_crate_deps")
@@ -113,9 +121,11 @@ rust_binary(
 ```
 
 Sweet! Fast bazel-cached builds here we come! Let's try building all targets with
+
 ```
 bazel build //...
 ```
+
 and watch bazel fill in that initial cache!
 
 ...
@@ -125,12 +135,15 @@ Wait.
 I'm getting an error about `Cargo.Bazel.lock` not existing.
 That makes sense---it's mentioned in https://bazelbuild.github.io/rules_rust/crate_universe.html#crates_repository.
 Let's add it with
+
 ```
 touch Cargo.Bazel.lock
 ```
+
 and try again!
 
 Alright, I see another error:
+
 ```
 ERROR: An error occurred during the fetch of repository 'crate_index':
    Traceback (most recent call last):
@@ -141,10 +154,12 @@ ERROR: An error occurred during the fetch of repository 'crate_index':
 Error in path: Unable to load package for //:Cargo.Bazel.lock: BUILD file not found in any of the following directories. Add a BUILD file to a directory to mark it as a package.
  - /Users/preston/git/bazel-rust-guided-experiment/stage-1-bazel-from-rules-rust-example
 ```
+
 Looking at that documentation, it does have a `BUILD` file at the same level
 as the `Cargo.Bazel.lock` file---let's add an empty one and see if it works!
 
 Alright, we are getting closer. New error:
+
 ```
 An error occurred during the fetch of repository 'crate_index':
    Traceback (most recent call last):
@@ -154,6 +169,7 @@ An error occurred during the fetch of repository 'crate_index':
                 fail((
 Error in fail: The current `lockfile` is out of date for 'crate_index'. Please re-run bazel using `CARGO_BAZEL_REPIN=true` if this is expected and the lockfile should be updated.
 ```
+
 Again, this is somewhat expected---the subsection
 https://bazelbuild.github.io/rules_rust/crate_universe.html#repinning--updating-dependencies
 points it out.
@@ -179,9 +195,10 @@ when we filled in the manifests originally.
 > :eyes: ... Were you?
 
 > :facepalm: Yes, actually, part of the point of this exercise is to
+>
 > 1. go through and record errors that I run into,
 > 1. provide an example of how someone went through the `rules_rust` documentation, and
-> 2. do the minimum amount of work needed to get things in a functioning state.
+> 1. do the minimum amount of work needed to get things in a functioning state.
 >
 > If I do something extra at some early point, it might be unnecessary after all!
 
@@ -189,6 +206,7 @@ when we filled in the manifests originally.
 
 Let's quickly add this manifest to our `WORKSPACE.bazel` file so that
 `crates_repository` looks like
+
 ```python
 crates_repository(
     name = "crate_index",
@@ -206,6 +224,7 @@ we get... Rust compilation errors?
 Ahh, it's all for our dependencies.
 Let's specify that the deps for our `hello_world` target
 are `all_crate_deps()` and let's see if that works:
+
 ```python
 rust_binary(
     name = "hello_world",
@@ -216,9 +235,11 @@ rust_binary(
 
 Oh. My. Goodness. It works!
 Running
+
 ```
 bazel run //backend:hello_world
 ```
+
 seems to work fine.
 And we can verify that it's working by going to
 `localhost:3000` and seeing that classic greeting.
