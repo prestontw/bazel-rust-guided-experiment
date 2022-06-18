@@ -73,6 +73,10 @@ is available at `localhost:3000`!
 
 > :facepalm: Sweet, seems good to me!
 
+> :eyes: What do you think, dear reader?
+> Take a moment---does this directory structure
+> match previous Rust projects you've worked in before?
+
 ### Using a local dependency from `bazel`'s side
 
 We will follow
