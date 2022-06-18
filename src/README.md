@@ -115,10 +115,10 @@ the steps from the previous completed goal to the current target goal,
 and any errors we encounter along the way.
 The general flow is
 
-0. The initial rust project,
-1. Building with bazel,
-1. Vendoring with bazel, and finally
-1. Wrapping up.
+0. [The initial rust project](./stage-0/),
+1. [Building with bazel](./stage-1-bazel-from-rules-rust-example/),
+1. [Vendoring with bazel](./stage-2-crates-vendor/), and finally
+1. [Wrapping up](./stage-3-upgrade-version/).
 
 ## TL;DR
 

@@ -1,4 +1,4 @@
-## Stage 3: Wrapping up
+# Stage 3: Wrapping up
 
 Wow, we've done it! We've built our project with bazel,
 we are getting bazel to use our vendored dependencies,
@@ -73,6 +73,10 @@ is available at `localhost:3000`!
 
 > :facepalm: Sweet, seems good to me!
 
+> :eyes: What do you think, dear reader?
+> Take a moment---does this directory structure
+> match previous Rust projects you've worked in before?
+
 ### Using a local dependency from `bazel`'s side
 
 We will follow
@@ -141,7 +145,7 @@ bazel build //backend/server:hello_world
 > Ahh, yep, let's update our paths for our vendoring `BUILD.bazel`.
 
 > :eyes: If `math` needed dependencies to function,
-> we would probably add it's `Cargo.toml` at this point
+> we would probably add its `Cargo.toml` at this point
 > in the same location.
 
 Trying to re-vendor, I get

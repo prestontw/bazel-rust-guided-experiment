@@ -1,4 +1,4 @@
-## Stage 2: Let's vendor our dependencies through bazel!
+# Stage 2: Let's vendor our dependencies through bazel!
 
 To recap, we can build our project through bazel! Whoopee!
 But it isn't making use of our vendored dependencies that we got
@@ -38,18 +38,7 @@ We will tweak it slightly becase we want to reuse the vendored
 dependencies we set up in `cargo vendor`:
 
 ```python
-load("@rules_rust//crate_universe:defs.bzl", "crates_vendor")
-
-crates_vendor(
-    name = "crates_vendor",
-    manifests = [":Cargo.toml"],
-    vendor_path = "3rd-party/crates",
-    mode = "local",
-)
-
-load("@rules_rust//rust:defs.bzl", "rust_binary")
-# load("@crate_index//:defs.bzl", "all_crate_deps")
-load("//3rd-party/crates:defs.bzl", "all_crate_deps")
+{{ #include ./stage-2-crates-vendor/backend/.build1.bazel }}
 ```
 
 This leads to error messages saying that
@@ -78,14 +67,7 @@ on `//3rd-party/crates`.
 Now our `backend` `BUILD` file looks like
 
 ```python
-load("@rules_rust//crate_universe:defs.bzl", "crates_vendor")
-
-crates_vendor(
-    name = "crates_vendor",
-    manifests = [":Cargo.toml"],
-    vendor_path = "3rd-party/crates",
-    mode = "local",
-)
+{{ #include ./stage-2-crates-vendor/backend/.build2.bazel }}
 ```
 
 Note that we need to use `bazel run` instead of `bazel build`.
@@ -135,13 +117,7 @@ Anyway, let's try loading from it. Filling back in code that we removed,
 our `BUILD` file now ends with
 
 ```python
-load("//3rd-party/crates:defs.bzl", "all_crate_deps")
-
-rust_binary(
-    name = "hello_world",
-    srcs = ["src/main.rs"],
-    deps = all_crate_deps(normal = True,),
-)
+{{ #include ./stage-2-crates-vendor/backend/.build3.bazel:10: }}
 ```
 
 Finally, let's build just to make sure that everything works.
@@ -172,36 +148,17 @@ let's remove it from our `WORKSPACE` file.
 It now ends with
 
 ```python
-load("@rules_rust//crate_universe:crates_deps.bzl", "crate_repositories")
-
-crate_repositories()
+{{ #include ./stage-2-crates-vendor/WORKSPACE.bazel:24:26}}
 ```
 
 The final version of our `backend/BUILD.bazel` and `3rd-party/BUILD.bazel` are:
 
 ```python
-exports_files(["Cargo.toml"])
-
-load("@rules_rust//rust:defs.bzl", "rust_binary")
-load("//3rd-party/crates:defs.bzl", "all_crate_deps")
-
-rust_binary(
-    name = "hello_world",
-    srcs = ["src/main.rs"],
-    deps = all_crate_deps(normal = True,),
-)
+{{ #include ./stage-2-crates-vendor/backend/BUILD.bazel }}
 ```
 
 ```python
-load("@rules_rust//crate_universe:defs.bzl", "crates_vendor")
-
-crates_vendor(
-    name = "crates_vendor",
-    manifests = ["//backend:Cargo.toml"],
-    mode = "local",
-    vendor_path = "crates",
-    tags = ["manual"],
-)
+{{ #include ./stage-2-crates-vendor/3rd-party/BUILD.bazel:4: }}
 ```
 
 Building our backend target again works!
@@ -211,7 +168,7 @@ And uses our vendored dependencies.
 
 > :eyes: Hmm, look at that, we don't need some of these files anymore!
 
-> :facepalm: Yes, this actually took me reaching out on slack to realize.
+> :facepalm: Yes, this actually took me [reaching out on slack](https://bazelbuild.slack.com/archives/CSV56UT0F) to realize.
 > Because we aren't using `crate_index` anymore,
 > we can also remove our old `BUILD.bazel` at the root level
 > and the `Cargo.Bazel.lock`.

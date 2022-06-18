@@ -27,31 +27,14 @@ Let's copy those contents to a `WORKSPACE.bazel` file
 we put at the root level of our project:
 
 ```python
-load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
-
-# To find additional information on this release or newer ones visit:
-# https://github.com/bazelbuild/rules_rust/releases
-http_archive(
-    name = "rules_rust",
-    sha256 = "39655ab175e3c6b979f362f55f58085528f1647957b0e9b3a07f81d8a9c3ea0a",
-    urls = [
-        "https://mirror.bazel.build/github.com/bazelbuild/rules_rust/releases/download/0.2.0/rules_rust-v0.2.0.tar.gz",
-        "https://github.com/bazelbuild/rules_rust/releases/download/0.2.0/rules_rust-v0.2.0.tar.gz",
-    ],
-)
-
-load("@rules_rust//rust:repositories.bzl", "rules_rust_dependencies", "rust_register_toolchains")
-
-rules_rust_dependencies()
-
-rust_register_toolchains()
+{{ #include ./stage-1-bazel-from-rules-rust-example/.workspace1.bazel }}
 ```
 
 [Later in that page](https://bazelbuild.github.io/rules_rust/#specifying-rust-version)
 they mention how we can specify the Rust version we want to use:
 
 ```python
-rust_register_toolchains(version = "1.59.0", edition="2018")
+{{ #include ./stage-1-bazel-from-rules-rust-example/WORKSPACE.bazel:18 }}
 ```
 
 Let's do that as well!
@@ -79,9 +62,7 @@ Slow down, eager beaver! Looking at the setup (https://bazelbuild.github.io/rule
 there are actually some changes that we need to make to our `WORKSPACE` file:
 
 ```python
-load("@rules_rust//crate_universe:repositories.bzl", "crate_universe_dependencies")
-
-crate_universe_dependencies()
+{{ #include ./stage-1-bazel-from-rules-rust-example/WORKSPACE.bazel:20:22 }}
 ```
 
 One of the ways that we can handle our dependencies is through a cargo workspace:
@@ -90,19 +71,7 @@ This matches our project structure already, yay!
 Let's copy that code:
 
 ```python
-load("@rules_rust//crate_universe:defs.bzl", "crates_repository")
-
-crates_repository(
-    name = "crate_index",
-    lockfile = "//:Cargo.Bazel.lock",
-    manifests = [
-      "//:Cargo.toml",
-    ],
-)
-
-load("@crate_index//:defs.bzl", "crate_repositories")
-
-crate_repositories()
+{{ #include ./stage-1-bazel-from-rules-rust-example/.workspace2.bazel:24:36}}
 ```
 
 There's another code example for a `BUILD` file for a library,
@@ -111,13 +80,7 @@ Let's copy a barebones version of the [`rust_binary`](https://bazelbuild.github.
 example to build our backend service:
 
 ```python
-load("@rules_rust//rust:defs.bzl", "rust_binary")
-load("@crate_index//:defs.bzl", "all_crate_deps")
-
-rust_binary(
-    name = "hello_world",
-    srcs = ["src/main.rs"],
-)
+{{ #include ./stage-1-bazel-from-rules-rust-example/backend/.build1.bazel }}
 ```
 
 Sweet! Fast bazel-cached builds here we come! Let's try building all targets with
@@ -202,20 +165,13 @@ when we filled in the manifests originally.
 >
 > If I do something extra at some early point, it might be unnecessary after all!
 
-> :eyes: Is this, perhaps, more foreshadowing..?
+> :eyes: Is this, perhaps, foreshadowing..?
 
 Let's quickly add this manifest to our `WORKSPACE.bazel` file so that
 `crates_repository` looks like
 
 ```python
-crates_repository(
-    name = "crate_index",
-    lockfile = "//:Cargo.Bazel.lock",
-    manifests = [
-      "//:Cargo.toml",
-      "//backend:Cargo.toml",
-    ],
-)
+{{ #include ./stage-1-bazel-from-rules-rust-example/WORKSPACE.bazel:26:33 }}
 ```
 
 Let's try building now! If we run `bazel build //...`,
@@ -226,11 +182,7 @@ Let's specify that the deps for our `hello_world` target
 are `all_crate_deps()` and let's see if that works:
 
 ```python
-rust_binary(
-    name = "hello_world",
-    srcs = ["src/main.rs"],
-    deps = all_crate_deps(),
-)
+{{ #include ./stage-1-bazel-from-rules-rust-example/backend/BUILD.bazel:4:8 }}
 ```
 
 Oh. My. Goodness. It works!
