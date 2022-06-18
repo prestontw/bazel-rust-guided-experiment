@@ -153,8 +153,11 @@ In this case, I think the smart builds and caching is worth the extra work
 for large enough projects.
 
 For using Rust and Bazel together specifically,
-there are both really pleasant benefits compared to some other bazel ecosystems
-and also some really sharp corners compared to projects that build fine with `cargo`.
+the experience falls somewhere in between using `cargo`
+and using `bazel` with other languages.
+Rust and Bazel have benefits that some other bazel ecosystems really struggle with.
+On the other hand, bazel (or `rules_rust`) is more opinionated than `cargo`
+when it comes to directory structures.
 Most of my difficulty in this experiment was making my directory structure
 match what bazel (or `rules_rust`) expected.
 But after that struggle, I got a bazel environment that
@@ -166,9 +169,10 @@ getting bazel to work with IntelliJ).
 Now that I've gone through this struggle,
 hopefully other people can get the cool benefits
 without all of the flailing I did.
+
 This guide is really only possible because we are standing on the shoulders of giants---`rules_rust`
 developers really put in a lot of work to make these
-typically painful issues into non-issues.
+typically painful `bazel` issues into non-issues.
 But I think there still could be some work on building
 projects that work with `cargo` in `bazel`.
 
@@ -176,6 +180,10 @@ projects that work with `cargo` in `bazel`.
 > works better for this.
 > But I also ran into problems using `cargo-raze`...
 > Maybe I'll look into it again another time.
+>
+> I think really, the tradeoff comes down to the work needed to adapt
+> your directory structure to what `bazel` is expecting
+> vs the caching that `bazel` gives you.
 
 There is something else to keep in mind regarding using `bazel`:
 we have had to add these build files ourselves to get this level of caching.
