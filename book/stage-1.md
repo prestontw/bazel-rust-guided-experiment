@@ -202,7 +202,7 @@ when we filled in the manifests originally.
 >
 > If I do something extra at some early point, it might be unnecessary after all!
 
-> :eyes: Is this, perhaps, more foreshadowing..?
+> :eyes: Is this, perhaps, foreshadowing..?
 
 Let's quickly add this manifest to our `WORKSPACE.bazel` file so that
 `crates_repository` looks like

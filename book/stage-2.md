@@ -211,7 +211,7 @@ And uses our vendored dependencies.
 
 > :eyes: Hmm, look at that, we don't need some of these files anymore!
 
-> :facepalm: Yes, this actually took me reaching out on slack to realize.
+> :facepalm: Yes, this actually took me [reaching out on slack](https://bazelbuild.slack.com/archives/CSV56UT0F) to realize.
 > Because we aren't using `crate_index` anymore,
 > we can also remove our old `BUILD.bazel` at the root level
 > and the `Cargo.Bazel.lock`.

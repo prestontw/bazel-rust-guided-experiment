@@ -141,7 +141,7 @@ bazel build //backend/server:hello_world
 > Ahh, yep, let's update our paths for our vendoring `BUILD.bazel`.
 
 > :eyes: If `math` needed dependencies to function,
-> we would probably add it's `Cargo.toml` at this point
+> we would probably add its `Cargo.toml` at this point
 > in the same location.
 
 Trying to re-vendor, I get
