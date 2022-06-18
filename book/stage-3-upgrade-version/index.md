@@ -164,6 +164,70 @@ This might be evidence that we need to add our
 dependency on `math` to our `server/BUILD.bazel`,
 or it could be that we are off the beaten path.
 
+> :facepalm: I actually took a beat here to take a break.
+> I checked to see if there were any examples that were doing what we are trying to do.
+> I couldn't find any.
+> After some more flailing, running lots of `bazel clean`'s,
+> trying to revendor and running into errors,
+> I decided to try another approach.
+>
+> I started from `stage-2`, but instead of going straight to adding a local dependency,
+> I moved the folders to a structure that would support this.
+> I noticed two things:
+>
+> 1. I was running into the same error, and
+> 1. The directory structure didn't make much sense.
+>
+> Why is there this random nested folder?
+> This pointed me to think that I was too quick
+> to copy the server functionality into a sub-folder.
+> Let's try again, but with `server`'s files inside of `backend`.
+
+That gives us
+
+```toml
+[workspace]
+
+members = [
+  "backend",
+  "backend/math",
+  # deployments/best-ci-util-ever
+]
+```
+
+and
+
+```toml
+[package]
+name = "example-readme"
+version = "0.1.0"
+edition = "2018"
+publish = false
+
+[dependencies]
+math = { path = "./math" }
+```
+
+for our root-level and "`server`" `Cargo.toml`'s.
+Let's try from this point and see if we run into the same errors.
+
+> :eyes: Let's check after all of this flailing that we are actually using
+> `math` and that everything is setup correctly, including `Cargo.toml`'s
+> as well as `BUILD.bazel`'s.
+> This includes incorporating our dependency on `math` in our `BUILD.bazel`:
+>
+> ```
+>     deps = ["//backend/math:math_lib"] + all_crate_deps(),
+> ```
+
+> :eyes: _Most_ of the pain points we've run into
+> seem to be assumptions around directory structure that aren't immediately clear.
+> We faced this for dependencies, original repo layout,
+> and now for integrating local dependencies.
+> Part of this might be natural ("Oh yeah, why didn't you add a subdirectory for the local dependency?"),
+> but all of those project structures worked fine just with Cargo.
+> Bazel is more opinionated in its folder structure.
+
 ## What did we do?
 
 We made our project a little more realistic!

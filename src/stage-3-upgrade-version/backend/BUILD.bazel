@@ -6,5 +6,5 @@ load("//3rd-party/crates:defs.bzl", "all_crate_deps")
 rust_binary(
     name = "hello_world",
     srcs = ["src/main.rs"],
-    deps = all_crate_deps() + ["//backend/math:math_lib"],
+    deps = ["//backend/math:math_lib"] + all_crate_deps(),
 )
