@@ -32,7 +32,7 @@ Does this supplant `Cargo.toml` information?
 > that I ended up getting scared away.
 
 This is too much. But, there are other worked examples!
-Let's try copying [an example](https://github.com/bazelbuild/rules_rust/blob/0265c293f195a59da45f83aafcfca78eaf43a4c5/examples/crate_universe/vendor_local_manifests/BUILD.bazel){:target="\_blank"} from the `rules_rust` repo.
+Let's try copying [an example](https://github.com/bazelbuild/rules_rust/blob/0265c293f195a59da45f83aafcfca78eaf43a4c5/examples/crate_universe/vendor_local_manifests/BUILD.bazel) from the `rules_rust` repo.
 This is for our `BUILD` file in our `backend` directory.
 We will tweak it slightly becase we want to reuse the vendored
 dependencies we set up in `cargo vendor`:
