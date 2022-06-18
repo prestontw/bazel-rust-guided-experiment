@@ -280,6 +280,8 @@ INFO: Build completed successfully, 2 total actions
 
 We made our project a little more realistic!
 We used a more up to date version of `rules_rust` and added a local dependency to our project!
+We also found another assumption bazel makes for source folders
+and an unexpected assumption around local dependency names.
 
 ## What's next?
 
@@ -287,6 +289,59 @@ It's up to you!
 
 > :tada: Doo-do-de-do do-do-do-doo!
 
-```
+Some ideas I have are:
 
-```
+- Running tests through `bazel`.
+  I've done this before rather quickly,
+  it shouldn't be too bad.
+  They have nice utility rules we can use to enumerate all of the tests automatically.
+- Building a Docker container containing our Rust application.
+- Actually using this in a CI pipeline, such as CircleCI!
+
+As far as what I want to do now that this is done:
+
+- Give documentation feedback to `rules_rust`.
+  - Some of the naming is confusing for a beginner,
+    such as `crates_repository` vs `crate_repositories`,
+    but it seems like it is with the rest of the bazel ecosystem.
+    Maybe improved documentation on what these nouns mean would be helpful?
+  - Add an example of vendoring with manifests in the `rules_rust` documentation.
+    Both the examples for **Cargo Workspaces** and **Direct Packages** use `crates_repository`.
+    I think that would make it clearer that there is a matrix of decisions between
+    expressing dependencies (`Cargo.toml` or directly) and
+    how those are made available for use (downloaded or vendored).
+  - Add more comments in the sample files!
+    This can help beginners decipher what is necessary,
+    why we are specifying something, etc.
+    There's a tension between making things beginner friendly
+    and being complete in documentation,
+    and I think code comments can help with this.
+- Think about how much of this can be automatic.
+  One easy one would be using the `rust-toolchain` file
+  instead of duplicating that information in the `WORKSPACE.bazel` file.
+
+  There have been several times in this experience where `cargo build` works fine,
+  but `bazel` is confused and errors.
+  A more difficult, but more amazing ask,
+  is if a lot of this `bazel` infrastructure could be automatically generated.
+  `crates_universe` does that for dependencies, but I'm imagining something like
+  having something that we can run as
+  `cargo run --bin <x>` being available as
+  `bazel run //<x>` without a specific `rust_binary` `BUILD.bazel`
+  file being written by the user.
+  There are some other rules that accomplish this to varying degrees,
+  like [npm packages with `bin` entries](https://bazelbuild.github.io/rules_nodejs/repositories.html#generated-macros-for-npm-packages-with-bin-entries).
+
+> :facepalm: This has been fun, y'all.
+> Thank you for sticking through this with me.
+> I hope that I've shown you that it is possible to integrate `bazel`
+> and `cargo` and that there are many opportunities for improvements here.
+
+## Document links:
+
+- https://bazelbuild.github.io/rules_rust/
+- https://bazelbuild.github.io/rules_rust/defs.html
+- https://bazelbuild.github.io/rules_rust/crate_universe.html
+- https://github.com/bazelbuild/rules_rust/tree/main/examples/crate_universe
+- https://bazelbuild.slack.com/archives/CSV56UT0F
+- https://github.com/tokio-rs/axum/tree/19fe93262fc14862f828b1db8b434fd8608a2a87/examples/readme
