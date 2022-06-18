@@ -17,7 +17,7 @@ I might move from attempt to attempt quickly.
 ## How did we get here?
 
 As alluded to before, there is a rule for vendoring dependencies:
-https://bazelbuild.github.io/rules_rust/crate_universe.html#crates_vendor.
+https://bazelbuild.github.io/rules_rust/crate_universe.html#crates_vendor{:target="_blank"}.
 However, I don't really get its example.
 It specifies an annotation---is this related to a dependency?
 Does this supplant `Cargo.toml` information?
