@@ -1,4 +1,4 @@
-## Stage 3: Wrapping up
+# Stage 3: Wrapping up
 
 Wow, we've done it! We've built our project with bazel,
 we are getting bazel to use our vendored dependencies,
@@ -20,14 +20,7 @@ https://github.com/bazelbuild/rules_rust/releases.
 Let's update it:
 
 ```python
-http_archive(
-    name = "rules_rust",
-    sha256 = "73580f341f251f2fc633b73cdf74910f4da64d06a44c063cbf5c01b1de753ec1",
-    urls = [
-        "https://mirror.bazel.build/github.com/bazelbuild/rules_rust/releases/download/0.5.0/rules_rust-v0.5.0.tar.gz",
-        "https://github.com/bazelbuild/rules_rust/releases/download/0.5.0/rules_rust-v0.5.0.tar.gz",
-    ],
-)
+{{ #include ./stage-3-upgrade-version/WORKSPACE.bazel:5:12 }}
 ```
 
 > :eyes: Boom, done, next!
@@ -47,20 +40,13 @@ then make the necessary changes on the bazel side.
 First, let's update our workspace `Cargo.toml` file:
 
 ```toml
-[workspace]
-
-members = [
-  "backend/server",
-  "backend/math",
-  # deployments/best-ci-util-ever
-]
+{{ #include ./stage-3-upgrade-version/.Cargo1.toml }}
 ```
 
 And let's include a dependency on `math` and use the `double` function in `server`.
 
 ```toml
-[dependencies]
-math = { path = "../math" }
+{{ #include ./stage-3-upgrade-version/backend/.Cargo1.toml:7:8}}
 ```
 
 Running
@@ -96,15 +82,7 @@ we could specify visibility other than `public`,
 but let's do that now for the sake of getting up and running quickly.
 
 ```python
-package(default_visibility = ["//visibility:public"])
-exports_files(["Cargo.toml"])
-
-load("@rules_rust//rust:defs.bzl", "rust_library")
-
-rust_library(
-    name = "math_lib",
-    srcs = ["src/lib.rs"],
-)
+{{ #include ./stage-3-upgrade-version/backend/math/.build1.bazel }}
 ```
 
 Before we update our `backend/server/BUILD.bazel`
@@ -186,26 +164,13 @@ or it could be that we are off the beaten path.
 That gives us
 
 ```toml
-[workspace]
-
-members = [
-  "backend",
-  "backend/math",
-  # deployments/best-ci-util-ever
-]
+{{ #include ./stage-3-upgrade-version/Cargo.toml }}
 ```
 
 and
 
 ```toml
-[package]
-name = "example-readme"
-version = "0.1.0"
-edition = "2018"
-publish = false
-
-[dependencies]
-math = { path = "./math" }
+{{ #include ./stage-3-upgrade-version/backend/Cargo.toml::8 }}
 ```
 
 for our root-level and "`server`" `Cargo.toml`'s.
@@ -217,7 +182,7 @@ Let's try from this point and see if we run into the same errors.
 > This includes incorporating our dependency on `math` in our `BUILD.bazel`:
 >
 > ```
->     deps = ["//backend/math:math_lib"] + all_crate_deps(),
+> {{ #include ./stage-3-upgrade-version/backend/.build1.bazel:9}}
 > ```
 
 Unexpectedly, this doesn't work:
@@ -242,11 +207,11 @@ Let's make the necessary changes to our `math` library
 and reference it as such:
 
 ```python
-    name = "math",
+{{ #include ./stage-3-upgrade-version/backend/math/BUILD.bazel:7 }}
 ```
 
 ```python
-    deps = ["//backend/math"] + all_crate_deps(),
+{{ #include ./stage-3-upgrade-version/backend/BUILD.bazel:9 }}
 ```
 
 Running `bazel build //...`
