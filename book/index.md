@@ -131,6 +131,9 @@ your Rust code is not at the root level of the repository.
 where using bazel would lead to cross-language builds,
 and potentially less likely if you are working in a Rust-only project.)
 
+Also make sure that you name your local dependency `rust_library` targets
+the same as their crate name.
+
 The bazel slack rust channel seems to be active and I found
 people there to be very helpful! Thank you so much to them!
 
@@ -177,3 +180,4 @@ Having a bunch of companies use this tool means that everyone can benefit
 
 Separately, bazel can also be used to [minimise the number of potential dependencies](https://youtu.be/5OjqD-ow8GE?t=2089),
 providing a road bump from your code base from turning into a ball of mud.
+In this scenario, bazel is actually a tool against unbounded complexity of dependencies.
