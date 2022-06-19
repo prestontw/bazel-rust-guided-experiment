@@ -299,6 +299,7 @@ Some ideas I have are:
   I've done this before rather quickly,
   it shouldn't be too bad.
   They have nice utility rules we can use to enumerate all of the tests automatically.
+- Running clippy and formatting through `bazel`.
 - Building a Docker container containing our Rust application.
 - Actually using this in a CI pipeline, such as CircleCI!
 
@@ -335,6 +336,8 @@ As far as what I want to do now that this is done:
   file being written by the user.
   There are some other rules that accomplish this to varying degrees,
   like [npm packages with `bin` entries](https://bazelbuild.github.io/rules_nodejs/repositories.html#generated-macros-for-npm-packages-with-bin-entries).
+  `cargo-raze` might actually do this---I might take another look at it
+  and see if I can get it working.
 
 > :facepalm: This has been fun, y'all.
 > Thank you for sticking through this with me.
