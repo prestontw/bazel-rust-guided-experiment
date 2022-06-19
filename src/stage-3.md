@@ -301,7 +301,7 @@ As far as what I want to do now that this is done:
   file being written by the user.
   There are some other rules that accomplish this to varying degrees,
   like [npm packages with `bin` entries](https://bazelbuild.github.io/rules_nodejs/repositories.html#generated-macros-for-npm-packages-with-bin-entries).
-  `cargo-raze` could also fit in here---I might take another look at it
+  `cargo-raze` might actually do this---I might take another look at it
   and see if I can get it working.
 
 > :facepalm: This has been fun, y'all.
