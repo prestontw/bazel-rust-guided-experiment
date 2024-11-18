@@ -3,3 +3,5 @@
 **/bazel-out
 **/bazel-stage-*
 **/bazel-testlogs
+
+.DS_Store
