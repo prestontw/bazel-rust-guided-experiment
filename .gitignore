@@ -5,3 +5,4 @@
 **/bazel-testlogs
 
 .DS_Store
+book/

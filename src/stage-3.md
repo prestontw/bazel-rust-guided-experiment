@@ -8,7 +8,7 @@ There's actually one part that I forgot,
 something that is pretty important in a realistic Rust project.
 And that's local dependencies.
 
-> :eyes: There's also some small things that we can do,
+> 👀 There's also some small things that we can do,
 > like using a more recent version of `rules_rust`.
 
 ## How did we get here?
@@ -16,14 +16,14 @@ And that's local dependencies.
 Let's go through the upgrade first,
 since it's pretty quick!
 `rules_rust` has its releases available on
-https://github.com/bazelbuild/rules_rust/releases.
+<https://github.com/bazelbuild/rules_rust/releases>.
 Let's update it:
 
 ```python
 {{ #include ./stage-3-upgrade-version/WORKSPACE.bazel:5:12 }}
 ```
 
-> :eyes: Boom, done, next!
+> 👀 Boom, done, next!
 
 ### Local Dependency
 
@@ -57,31 +57,31 @@ cargo run
 
 is available at `localhost:3000`!
 
-> :facepalm: Sweet, seems good to me!
+> 🤦‍♂️ Sweet, seems good to me!
 
-> :eyes: What do you think, dear reader?
+> 👀 What do you think, dear reader?
 > Take a moment---does this directory structure
 > match previous Rust projects you've worked in before?
 
 ### Using a local dependency from `bazel`'s side
 
 We will follow
-https://bazelbuild.github.io/rules_rust/defs.html#rust_binary
+<https://bazelbuild.github.io/rules_rust/defs.html#rust_binary>
 for this.
 
 Specifically,
 
-![the library BUILD file](./.images/hello-lib-build.png)
+![the library BUILD file](./stage-3-upgrade-version/.images/hello-lib-build.png)
 
 and
 
-![the binary BUILD file](./.images/hello-world-build.png)
+![the binary BUILD file](./stage-3-upgrade-version/.images/hello-world-build.png)
 
 Similar to how we exported our `backend`'s `Cargo.toml`,
 we specify that `math` is a package.
 If we wanted to restrict access to this library,
 in case we wanted to reinforce architectural directory structure
-(like in https://youtu.be/5OjqD-ow8GE?t=2089),
+(like in <https://youtu.be/5OjqD-ow8GE?t=2089>),
 we could specify visibility other than `public`,
 but let's do that now for the sake of getting up and running quickly.
 
@@ -98,7 +98,7 @@ Let's run
 bazel build //backend/server:hello_world
 ```
 
-> :facepalm: Hmm, I'm running into a bunch of errors like
+> 🤦‍♂️ Hmm, I'm running into a bunch of errors like
 >
 > ```
 > error[E0405]: cannot find trait `IntoResponse` in this scope
@@ -122,7 +122,7 @@ bazel build //backend/server:hello_world
 >
 > Ahh, yep, let's update our paths for our vendoring `BUILD.bazel`.
 
-> :eyes: If `math` needed dependencies to function,
+> 👀 If `math` needed dependencies to function,
 > we would probably add its `Cargo.toml` at this point
 > in the same location.
 
@@ -134,9 +134,9 @@ thread 'main' panicked at 'called `Option::unwrap()` on a `None` value', externa
 note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 ```
 
-> :facepalm: Let's try adding `math`'s `Cargo.toml` to this list.
+> 🤦‍♂️ Let's try adding `math`'s `Cargo.toml` to this list.
 
-> :eyes: Should this work? If we just add the `Cargo.toml` here,
+> 👀 Should this work? If we just add the `Cargo.toml` here,
 > do we expect an error or a successful result?
 > If it's an error, what error do we expect?
 
@@ -146,7 +146,7 @@ This might be evidence that we need to add our
 dependency on `math` to our `server/BUILD.bazel`,
 or it could be that we are off the beaten path.
 
-> :facepalm: I actually took a beat here to take a break.
+> 🤦‍♂️ I actually took a beat here to take a break.
 > I checked to see if there were any examples that were doing what we are trying to do.
 > I couldn't find any.
 > After some more flailing, running lots of `bazel clean`'s,
@@ -180,7 +180,7 @@ and
 for our root-level and "`server`" `Cargo.toml`'s.
 Let's try from this point and see if we run into the same errors.
 
-> :eyes: Let's check after all of this flailing that we are actually using
+> 👀 Let's check after all of this flailing that we are actually usingnotrust
 > `math` and that everything is setup correctly, including `Cargo.toml`'s
 > as well as `BUILD.bazel`'s.
 > This includes incorporating our dependency on `math` in our `BUILD.bazel`:
@@ -191,7 +191,7 @@ Let's try from this point and see if we run into the same errors.
 
 Unexpectedly, this doesn't work:
 
-```
+```notrust
 ERROR: /Users/preston/git/bazel-rust-guided-experiment/src/stage-3-upgrade-version/backend/BUILD.bazel:6:12: Compiling Rust bin hello_world (1 files) failed: (Exit 1): process_wrapper failed: error executing command bazel-out/darwin_arm64-opt-exec-2B5CBBC6/bin/external/rules_rust/util/process_wrapper/process_wrapper --arg-file ... (remaining 130 arguments skipped)
 
 Use --sandbox_debug to see verbose messages from the sandbox
@@ -220,7 +220,7 @@ and reference it as such:
 
 Running `bazel build //...`
 
-```
+```notrust
 INFO: Analyzed 3 targets (2 packages loaded, 4 targets configured).
 INFO: Found 3 targets...
 INFO: Elapsed time: 0.898s, Critical Path: 0.78s
@@ -228,9 +228,9 @@ INFO: 2 processes: 1 internal, 1 darwin-sandbox.
 INFO: Build completed successfully, 2 total actions
 ```
 
-> :facepalm: I can't belive that works!
+> 🤦‍♂️ I can't belive that works!
 
-> :eyes: _Most_ of the pain points we've run into
+> 👀 _Most_ of the pain points we've run into
 > seem to be assumptions around directory structure that aren't immediately clear.
 > We faced this for dependencies, original repo layout,
 > and now for integrating local dependencies.
@@ -256,7 +256,7 @@ and an unexpected assumption around local dependency names.
 
 It's up to you!
 
-> :tada: Doo-do-de-do do-do-do-doo!
+> 🎉 Doo-do-de-do do-do-do-doo!
 
 Some ideas I have are:
 
@@ -304,16 +304,16 @@ As far as what I want to do now that this is done:
   `cargo-raze` might actually do this---I might take another look at it
   and see if I can get it working.
 
-> :facepalm: This has been fun, y'all.
+> 🤦‍♂️ This has been fun, y'all.
 > Thank you for sticking through this with me.
 > I hope that I've shown you that it is possible to integrate `bazel`
 > and `cargo` and that there are many opportunities for improvements here.
 
 ## Document links:
 
-- https://bazelbuild.github.io/rules_rust/
-- https://bazelbuild.github.io/rules_rust/defs.html
-- https://bazelbuild.github.io/rules_rust/crate_universe.html
-- https://github.com/bazelbuild/rules_rust/tree/main/examples/crate_universe
-- https://bazelbuild.slack.com/archives/CSV56UT0F
-- https://github.com/tokio-rs/axum/tree/19fe93262fc14862f828b1db8b434fd8608a2a87/examples/readme
+- <https://bazelbuild.github.io/rules_rust/>
+- <https://bazelbuild.github.io/rules_rust/defs.html>
+- <https://bazelbuild.github.io/rules_rust/crate_universe.html>
+- <https://github.com/bazelbuild/rules_rust/tree/main/examples/crate_universe>
+- <https://bazelbuild.slack.com/archives/CSV56UT0F>
+- <https://github.com/tokio-rs/axum/tree/19fe93262fc14862f828b1db8b434fd8608a2a87/examples/readme>

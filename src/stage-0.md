@@ -10,8 +10,7 @@ For building the backend, this stage uses cargo.
 ## How did we get here?
 
 This is copied from Axum's [`readme` example](https://github.com/tokio-rs/axum/tree/19fe93262fc14862f828b1db8b434fd8608a2a87/examples/readme).
-For actually vendoring the dependencies, this uses `cargo-vendor`:
-https://doc.rust-lang.org/cargo/commands/cargo-vendor.html.
+For actually vendoring the dependencies, this uses [`cargo-vendor`](https://doc.rust-lang.org/cargo/commands/cargo-vendor.html).
 
 There are two things to note on this vendoring:
 
@@ -26,7 +25,7 @@ With the above two notes, the command that we run is
 cargo vendor --versioned-dirs 3rd-party/crates
 ```
 
-> :facepalm: I actually messed both of these things up when I originally went through this process.
+> 🤦‍♂️ I actually messed both of these things up when I originally went through this process.
 > That resulted in large git diffs when I vendored using bazel
 > (since it uses versions in its directory names)
 > and lots of floundering when trying to get bazel

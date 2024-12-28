@@ -8,7 +8,7 @@ This is our goal for this stage.
 Watch out, there is a little bit of flailing here.
 Maybe not narratively
 
-> :facepalm: Hopefully!
+> 🤦‍♂️ Hopefully!
 
 but this is something that I struggled with.
 While trying to get things working,
@@ -17,12 +17,12 @@ I might move from attempt to attempt quickly.
 ## How did we get here?
 
 As alluded to before, there is a rule for vendoring dependencies:
-https://bazelbuild.github.io/rules_rust/crate_universe.html#crates_vendor.
+<https://bazelbuild.github.io/rules_rust/crate_universe.html#crates_vendor>.
 However, I don't really get its example.
 It specifies an annotation---is this related to a dependency?
 Does this supplant `Cargo.toml` information?
 
-> :eyes: I think there is a difference between minimal examples
+> 👀 I think there is a difference between minimal examples
 > to help beginners and more full-featured examples to show what
 > is possible. One thing that could help a beginner with filtering
 > out some of the more advanced options is: documentation!
@@ -50,7 +50,7 @@ before it's created since it's in the same file.
 That's weird. Let's try upgrading our version of `rules_rust`
 and see if that solves it for us.
 
-> :eyes: `rules_rust` is now on version `0.5.0`
+> 👀 `rules_rust` is now on version `0.5.0`
 > while the documentation mentions `0.2.0`.
 > To further complicate things, while I was writing this example,
 > the most recent release was version `0.4.0`.
@@ -87,7 +87,7 @@ If we want some of our utilities to use the same
 version as we do in our backend, this nested directory
 structure isn't condusive to that.
 
-> :eyes: The utilities dependency issue is just an example.
+> 👀 The utilities dependency issue is just an example.
 > Having other smaller services
 > in a `services` directory would also motivate this sharing.
 
@@ -105,8 +105,8 @@ The full path won't work in general as soon as we go to another machine,
 so let's try a relative path!
 Let's try `../3rd-party/crates` and see if it works.
 
-> :facepalm: I think at this point,
-> https://bazelbuild.github.io/rules_rust/crate_universe.html#crates_vendor
+> 🤦‍♂️ I think at this point,
+> <https://bazelbuild.github.io/rules_rust/crate_universe.html#crates_vendor>
 > is starting to make some more sense.
 > We have a specific target for vendoring the dependencies,
 > and, for some reason,
@@ -122,21 +122,21 @@ our `BUILD` file now ends with
 
 Finally, let's build just to make sure that everything works.
 
-```
+```notrust
 ERROR: /Users/preston/git/bazel-rust-guided-experiment/stage-2-crates-vendor/backend/BUILD.bazel:13:12: //backend:hello_world: invalid label '//backend/../3rd-party/crates/axum-0.5.6:axum' in element 0 of attribute 'deps' in 'rust_binary' rule: invalid package name 'backend/../3rd-party/crates/axum-0.5.6': package name component contains only '.' characters
 ```
 
 So it looks like relative paths didn't work.
 
-> :eyes: So time for the file actually mentioned in the documentation, right?
+> 👀 So time for the file actually mentioned in the documentation, right?
 
-> :facepalm: Yes. It still feels weird to me that the path
+> 🤦‍♂️ Yes. It still feels weird to me that the path
 > being relative to the workspace root didn't work, but oh well!
 
 Copying the vendoring part of our `backend/BUILDFILE` to
 another directory, we see
 
-```
+```notrust
 ERROR: /Users/preston/git/bazel-rust-guided-experiment/stage-2-crates-vendor/3rd-party/BUILD.bazel:6:14: no such target '//:Cargo.toml': target 'Cargo.toml' not declared in package ''; however, a source file of this name exists.  (Perhaps add 'exports_files(["Cargo.toml"])' to /BUILD?)
 ```
 
@@ -166,9 +166,9 @@ And uses our vendored dependencies.
 
 ### Cleaning up previous steps
 
-> :eyes: Hmm, look at that, we don't need some of these files anymore!
+> 👀 Hmm, look at that, we don't need some of these files anymore!
 
-> :facepalm: Yes, this actually took me [reaching out on slack](https://bazelbuild.slack.com/archives/CSV56UT0F) to realize.
+> 🤦‍♂️ Yes, this actually took me [reaching out on slack](https://bazelbuild.slack.com/archives/CSV56UT0F) to realize.
 > Because we aren't using `crate_index` anymore,
 > we can also remove our old `BUILD.bazel` at the root level
 > and the `Cargo.Bazel.lock`.
@@ -181,7 +181,7 @@ If we vendor front-end dependencies, they can go here too!
 With this new separation, we got bazel building the project
 with our vendored dependencies.
 
-https://github.com/prestontw/bazel-rust-guided-experiment/pull/2
+<https://github.com/prestontw/bazel-rust-guided-experiment/pull/2>
 is all of the steps we did but condensed down to avoid
 the experimentation and flailing:
 

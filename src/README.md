@@ -15,11 +15,11 @@ with integrating `bazel`. There were separate issues that came up due to
 "incorrect" directory structure, using the wrong `bazel` rules, etc. Where I
 tried something that didn't work, I will point it out as a kind of warning sign.
 
-> :eyes: And I will point out places that might be problems in the future, or,
+> 👀 And I will point out places that might be problems in the future, or,
 > in general, interesting things that you should think about to keep reading
 > interactive.
 
-> :facepalm: And I will respond like this when I made the wrong decision or ran
+> 🤦‍♂️ And I will respond like this when I made the wrong decision or ran
 > into a sharp edge.
 
 ## Motivation---Why Bazel?
@@ -54,11 +54,11 @@ blogs, and comments that got me here:
    I really enjoy Amos's articles. I really enjoy the depth, the narrative, the
    content, and the characters...
 
-   > :eyes: What do you mean?
+   > 👀 What do you mean?
 
-   > :facepalm: You don't... see it?
+   > 🤦‍♂️ You don't... see it?
 
-   > :eyes: Ha ha... No.
+   > 👀 Ha ha... No.
 
    I really enjoyed that article in particular because it had a lot of stuff I could
    ~~steal~~ look into for my own Rust development. He has a specific section on
@@ -115,10 +115,10 @@ the steps from the previous completed goal to the current target goal,
 and any errors we encounter along the way.
 The general flow is
 
-0. [The initial rust project](./stage-0/),
-1. [Building with bazel](./stage-1-bazel-from-rules-rust-example/),
-1. [Vendoring with bazel](./stage-2-crates-vendor/), and finally
-1. [Wrapping up](./stage-3-upgrade-version/).
+0. [The initial rust project](stage-0.html),
+1. [Building with bazel](stage-1.html),
+1. [Vendoring with bazel](stage-2.html), and finally
+1. [Wrapping up](stage-3.html).
 
 ## TL;DR
 
@@ -144,7 +144,7 @@ If you spend a lot of time building, maybe!
 If your project is kind of small and build times are't significant,
 maybe stick with language tooling until that becomes painful.
 
-> :shrug: But I've also heard the advice that you should switch to bazel before this point.
+> 🤷‍♂️ But I've also heard the advice that you should switch to bazel before this point.
 
 If you work in a project that has different languages all working together,
 bazel is a nice unified build tool that tries (depending on support level)
@@ -176,12 +176,12 @@ typically painful `bazel` issues into non-issues.
 But I think there still could be some work on building
 projects that work with `cargo` in `bazel`.
 
-> :facepalm: Maybe `cargo-raze`, another tool for integrating `cargo` and `bazel`
+> 🤦‍♂️ Maybe `cargo-raze`, another tool for integrating `cargo` and `bazel`
 > works better for this.
 > But I also ran into problems using `cargo-raze`...
 > Maybe I'll look into it again another time.
 >
-> I think really, the tradeoff comes down to the work needed to adapt
+> I think, really, the tradeoff comes down to the work needed to adapt
 > your directory structure to what `bazel` is expecting
 > vs the caching that `bazel` gives you.
 

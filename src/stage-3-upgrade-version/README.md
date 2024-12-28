@@ -1,1 +1,0 @@
-../../book/stage-3.md
