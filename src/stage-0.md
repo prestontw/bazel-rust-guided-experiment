@@ -1,5 +1,7 @@
 # Stage 0
 
+Source: <https://github.com/prestontw/bazel-rust-guided-experiment/tree/main/src/stage-0>
+
 This is our starting version. This tries to mimic a monorepo where we have a backend
 (where our Rust code goes) as well as a frontend. We also have a utility `deployment`
 folder for general tools, which may include additional Rust code.

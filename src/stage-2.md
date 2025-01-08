@@ -1,5 +1,7 @@
 # Stage 2: Let's vendor our dependencies through bazel!
 
+Source: <https://github.com/prestontw/bazel-rust-guided-experiment/tree/main/src/stage-2-crates-vendor>
+
 To recap, we can build our project through bazel! Whoopee!
 But it isn't making use of our vendored dependencies that we got
 through `cargo vendor`! Let's try to remedy this.

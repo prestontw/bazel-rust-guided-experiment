@@ -1,5 +1,7 @@
 # Stage 1: Let's build with bazel!
 
+Source: <https://github.com/prestontw/bazel-rust-guided-experiment/tree/main/src/stage-1-bazel-from-rules-rust-example>
+
 Alright, we have a Rust project that somewhat represents a case
 that you might want to bazel-ify: we have a bunch of different languages
 all living in the same repository, and we are interested in caching
@@ -207,7 +209,7 @@ It's not using our cached dependencies, though...
 Let's get bazel to use our dependencies on-disk.
 Strap in, because the next stage is a little bumpy.
 
-> 👀 Did anyone else see https://bazelbuild.github.io/rules_rust/crate_universe.html#crates_vendor?
+> 👀 Did anyone else see <https://bazelbuild.github.io/rules_rust/crate_universe.html#crates_vendor>?
 > Just me?
 
 > 🤦‍♂️ I saw it, but it wasn't in the top-level example

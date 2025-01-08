@@ -1,5 +1,7 @@
 # Stage 3: Wrapping up
 
+Source: <https://github.com/prestontw/bazel-rust-guided-experiment/tree/main/src/stage-3-upgrade-version>
+
 Wow, we've done it! We've built our project with bazel,
 we are getting bazel to use our vendored dependencies,
 things are looking up for us!
